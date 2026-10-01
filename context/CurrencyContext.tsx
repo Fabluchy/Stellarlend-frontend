@@ -12,6 +12,16 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(
   undefined,
 );
 
+/**
+ * Fetches the user's display-currency preference from `/api/account/preferences`
+ * and makes it available via `useCurrencyPreference()`.
+ *
+ * The preferences API (and `preferencesSchema`) expose the field as
+ * `displayCurrency`, not `currency`. Always read `data.displayCurrency`
+ * here — using `data.currency` silently falls back to "USD" forever.
+ *
+ * Falls back to "USD" when the preference is absent or the request fails.
+ */
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrency] = useState<string>("USD");
   const [isLoading, setIsLoading] = useState<boolean>(true);
